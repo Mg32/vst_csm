@@ -1,6 +1,8 @@
 
 #include "../include/vst_processor.hpp"
 
+#include <public.sdk/source/vst/vstaudioprocessoralgo.h>
+
 namespace Steinberg {
 	namespace Vst {
 
@@ -31,18 +33,95 @@ namespace Steinberg {
 		}
 
 
+		tresult PLUGIN_API VstProcessor::canProcessSampleSize(int32 symbolicSampleSize)
+		{
+			if (symbolicSampleSize == kSample32)
+				return kResultTrue;
+		
+			if (symbolicSampleSize == kSample64)
+				return kResultTrue;
+		
+			return kResultFalse;
+		}
+
+
 		tresult PLUGIN_API VstProcessor::process(ProcessData & data)
 		{
-			Sample32 * inL = data.inputs[0].channelBuffers32[0];
-			Sample32 * inR = data.inputs[0].channelBuffers32[1];
-			Sample32 * outL = data.outputs[0].channelBuffers32[0];
-			Sample32 * outR = data.outputs[0].channelBuffers32[1];
-
-			for (int32 i = 0; i < data.numSamples; i++)
+			// parameters
+			if (data.inputParameterChanges != NULL)
 			{
-				outL[i] = inL[i];
-				outR[i] = inR[i];
+				IParameterChanges * paramChanges = data.inputParameterChanges;
+
+				int32 paramChangeCount = paramChanges->getParameterCount();
+				for (int32 i = 0; i < paramChangeCount; i++)
+				{
+					IParamValueQueue * queue = paramChanges->getParameterData(i);
+					if (queue == NULL) continue;
+
+					int32 sampleOffset;
+					ParamValue value;
+
+					int32 valueChangeCount = queue->getPointCount();
+					tresult result = queue->getPoint(valueChangeCount - 1, sampleOffset, value);
+					if (result != kResultTrue) continue;
+
+					int32 tag = queue->getParameterId();
+					switch (tag)
+					{
+					case TAG_PARAM_BYPASS:
+						m_bypass = ((double)value < 0.5);
+						break;
+
+					default:
+						break;
+					}
+				}
 			}
+
+			if (data.numInputs == 0 || data.numOutputs == 0)
+				return kResultTrue;
+
+			AudioBusBuffers & input = data.inputs[0];
+			AudioBusBuffers & output = data.outputs[0];
+
+			if (input.numChannels != output.numChannels)
+				return kResultFalse;
+
+			int32 numChannels = input.numChannels;
+			int32 numSamples = data.numSamples;
+			void ** buf_in = getChannelBuffersPointer(this->processSetup, input);
+			void ** buf_out = getChannelBuffersPointer(this->processSetup, output);
+
+			// bypass
+			if (m_bypass)
+			{
+				if (data.symbolicSampleSize == kSample32)
+					return processBypass<Sample32>(
+						numChannels, numSamples,
+						(Sample32 **)buf_in, (Sample32 **)buf_out
+					);
+
+				if (data.symbolicSampleSize == kSample64)
+					return processBypass<Sample64>(
+						numChannels, numSamples,
+						(Sample64 **)buf_in, (Sample64 **)buf_out
+					);
+
+				return kResultTrue;
+			}
+
+			// normal process
+			if (data.symbolicSampleSize == kSample32)
+				return processBypass<Sample32>(
+					numChannels, numSamples,
+					(Sample32 **)buf_in, (Sample32 **)buf_out
+				);
+
+			if (data.symbolicSampleSize == kSample64)
+				return processBypass<Sample64>(
+					numChannels, numSamples,
+					(Sample64 **)buf_in, (Sample64 **)buf_out
+				);
 
 			return kResultTrue;
 		}

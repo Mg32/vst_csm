@@ -3,6 +3,7 @@
 
 #include "../include/vst_fuid.hpp"
 #include "../include/vst_processor.hpp"
+#include "../include/vst_controller.hpp"
 
 
 #define MG_VST_VENDOR   "mogesystem"
@@ -35,6 +36,19 @@ BEGIN_FACTORY_DEF(MG_VST_VENDOR, MG_VST_URL, MG_VST_EMAIL)
 		MG_VST_VERSION,
 		kVstVersionString,
 		Steinberg::Vst::VstProcessor::createInstance
+	)
+
+	// VstController
+	DEF_CLASS2(
+		INLINE_UID_FROM_FUID(Steinberg::Vst::ControllerUID),
+		PClassInfo::kManyInstances,
+		kVstComponentControllerClass,
+		MG_VST_VSTNAME " Controller",
+		0,
+		"",
+		MG_VST_VERSION,
+		kVstVersionString,
+		Steinberg::Vst::VstController::createInstance
 	)
 
 END_FACTORY

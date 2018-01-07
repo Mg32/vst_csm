@@ -7,7 +7,7 @@
     <VST3EditorHost>$(VST3ToolPath)editorhost.exe</VST3EditorHost>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetExt>.vst</TargetExt>
+    <TargetExt>.vst3</TargetExt>
     <_PropertySheetDisplayName>lib_vstsdk_common</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>
@@ -20,12 +20,12 @@
       <AdditionalDependencies>base.lib;sdk.lib;vstgui.lib;vstgui_support.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>vst3.def</ModuleDefinitionFile>
     </Link>
-    <PreLinkEvent>
+    <PostBuildEvent>
       <Command>$(VST3Validator) $(TargetPath)</Command>
-    </PreLinkEvent>
-    <PreLinkEvent>
+    </PostBuildEvent>
+    <PostBuildEvent>
       <Message>VST3 Plug-in Validation</Message>
-    </PreLinkEvent>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="VST3ToolPath">

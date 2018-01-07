@@ -57,6 +57,9 @@
     <ClInclude Include="..\include\vst_processor.hpp">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\vst_tags.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vst3.def">
