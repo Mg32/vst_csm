@@ -1,0 +1,10 @@
+vst_csm dependencies:
+
+- Eigen 3
+http://eigen.tuxfamily.org/
+
+- VST 3.6.8 Audio Plug-Ins SDK
+https://www.steinberg.net/en/company/developers.html
+
+- Google Test
+https://github.com/google/googletest

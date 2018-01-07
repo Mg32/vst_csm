@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <VST3ToolPath>$(ProjectDir)..\external_libs\vstsdk\VST_SDK\VST3_SDK\build_x64\bin\Release\</VST3ToolPath>
+    <VST3Validator>$(VST3ToolPath)validator.exe</VST3Validator>
+    <VST3EditorHost>$(VST3ToolPath)editorhost.exe</VST3EditorHost>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetExt>.vst</TargetExt>
+    <_PropertySheetDisplayName>lib_vstsdk_common</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\external_libs\vstsdk\VST_SDK\VST3_SDK\vstgui4;$(ProjectDir)..\external_libs\vstsdk\VST_SDK\VST3_SDK\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>base.lib;sdk.lib;vstgui.lib;vstgui_support.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>vst3.def</ModuleDefinitionFile>
+    </Link>
+    <PreLinkEvent>
+      <Command>$(VST3Validator) $(TargetPath)</Command>
+    </PreLinkEvent>
+    <PreLinkEvent>
+      <Message>VST3 Plug-in Validation</Message>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="VST3ToolPath">
+      <Value>$(VST3ToolPath)</Value>
+    </BuildMacro>
+    <BuildMacro Include="VST3Validator">
+      <Value>$(VST3Validator)</Value>
+    </BuildMacro>
+    <BuildMacro Include="VST3EditorHost">
+      <Value>$(VST3EditorHost)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
