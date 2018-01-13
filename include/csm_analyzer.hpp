@@ -13,22 +13,22 @@
 class CsmAnalyzer final {
 public:
     CsmAnalyzer()
-    : m_order(0)
-    , m_chebyshev(nullptr)
-    , m_polynomial(nullptr)
-    , m_roots(nullptr)
-    , m_csm_freq(nullptr)
-    , m_csm_amp(nullptr)
+		: m_order(0)
+		, m_chebyshev(nullptr)
+		, m_polynomial(nullptr)
+		, m_roots(nullptr)
+		, m_csm_freq(nullptr)
+		, m_csm_amp(nullptr)
     {
     }
 
     CsmAnalyzer(const int order)
-    : m_order(order)
-    , m_chebyshev(new double[2 * (order + 1)])
-    , m_polynomial(new double[order + 1])
-    , m_roots(new double[order])
-    , m_csm_freq(new double[order])
-    , m_csm_amp(new double[order])
+		: m_order(order)
+		, m_chebyshev(new double[2 * (order + 1)])
+		, m_polynomial(new double[order + 1])
+		, m_roots(new double[order])
+		, m_csm_freq(new double[order])
+		, m_csm_amp(new double[order])
     {
         m_chebyshev_expansion = ChebyshevExpansion(m_order);
         m_hankel_equation = HankelEquation(m_order);
@@ -47,6 +47,12 @@ public:
 
     CompositeSinusoid * operator()(const double * r, const double fs)
     {
+		if (r[0] < kAutocorrThreshold)
+		{
+			// return an empty frame if RMS is almost zero
+			return new CompositeSinusoid(0);
+		}
+
         // chebyshev expansion
         m_chebyshev_expansion(r, m_chebyshev);
 
@@ -68,6 +74,8 @@ public:
     }
 
 private:
+	const double kAutocorrThreshold = 1e-6;
+
     int m_order;
     double * m_chebyshev;
     double * m_polynomial;

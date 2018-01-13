@@ -49,23 +49,23 @@ public:
         m_sines.resize(num_sines);
     }
 
-    void set_at(int index, sinusoid_t sine)
+    void set_at(std::size_t index, sinusoid_t sine)
     {
         m_sines[index] = sine;
     }
 
-    void set_at(int index, double m, double frequency)
+    void set_at(std::size_t index, double m, double frequency)
     {
         m_sines[index].m = m;
         m_sines[index].frequency = frequency;
     }
 
-    double m(int index)
+    double m(std::size_t index)
     {
         return m_sines[index].m;
     }
 
-    double frequency(int index)
+    double frequency(std::size_t index)
     {
         return m_sines[index].frequency;
     }
@@ -95,7 +95,7 @@ public:
         return out;
     }
 
-    double generate(const int frame, const double fs)
+    double generate(const std::size_t frame, const double fs)
     {
         return generate((double)frame / fs);
     }

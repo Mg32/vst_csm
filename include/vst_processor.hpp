@@ -3,6 +3,7 @@
 
 #include "vst_tags.hpp"
 #include "vst_fuid.hpp"
+#include "csm_sample_handler.hpp"
 
 #include <public.sdk/source/vst/vstaudioeffect.h>
 
@@ -14,6 +15,8 @@ namespace Steinberg {
 		public:
 			VstProcessor()
 				: m_bypass(false)
+				, m_csm_handler_L(new CsmSampleHandler(5, 8000, 0.01))
+				, m_csm_handler_R(new CsmSampleHandler(5, 8000, 0.01))
 			{
 				setControllerClass(ControllerUID);
 			}
@@ -37,6 +40,9 @@ namespace Steinberg {
 			bool m_bypass;
 
 		private:
+			std::unique_ptr<CsmSampleHandler> m_csm_handler_L;
+			std::unique_ptr<CsmSampleHandler> m_csm_handler_R;
+
 			template<typename T>
 			tresult processBypass(int32 numChannels, int32 numSamples, T ** buf_in, T ** buf_out)
 			{
@@ -66,8 +72,21 @@ namespace Steinberg {
 
 					for (int32 i = 0; i < numSamples; i++)
 					{
-						// TODO: implement our effector here
-						out[i] = in[i];
+						if (ch == 0)
+						{
+							// CSM left channel
+							out[i] = (*m_csm_handler_L)(in[i]);
+						}
+						else if (ch == 1)
+						{
+							// CSM right channel
+							out[i] = (*m_csm_handler_R)(in[i]);
+						}
+						else
+						{
+							// through
+							out[i] = in[i];
+						}
 					}
 				}
 

@@ -94,9 +94,9 @@
     <ClInclude Include="..\include\composite_sinusoid.hpp" />
     <ClInclude Include="..\include\csm_amplitude.hpp" />
     <ClInclude Include="..\include\csm_analyzer.hpp" />
-    <ClInclude Include="..\include\csm_frame_analyzer.hpp" />
     <ClInclude Include="..\include\csm_frame_data.hpp" />
-    <ClInclude Include="..\include\csm_frame_synthesizer.hpp" />
+    <ClInclude Include="..\include\csm_synthesizer.hpp" />
+    <ClInclude Include="..\include\csm_sample_handler.hpp" />
     <ClInclude Include="..\include\hankel_equation.hpp" />
     <ClInclude Include="..\include\polynomial_root.hpp" />
     <ClInclude Include="..\include\vst_controller.hpp" />

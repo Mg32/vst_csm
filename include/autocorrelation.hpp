@@ -1,9 +1,11 @@
 
 #pragma once
 
+#include <iostream>
+
 class Autocorrelation {
 public:
-    void operator()(const double * x, const int length_x, double * r, const int length_r)
+    void operator()(const double * x, const std::size_t length_x, double * r, const std::size_t length_r)
     {
         for (int lag = 0; lag < length_r; lag++)
         {

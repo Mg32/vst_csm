@@ -69,7 +69,7 @@ namespace Steinberg {
 					switch (tag)
 					{
 					case TAG_PARAM_BYPASS:
-						m_bypass = ((double)value < 0.5);
+						m_bypass = ((double)value > 0.5);
 						break;
 
 					default:
@@ -112,13 +112,13 @@ namespace Steinberg {
 
 			// normal process
 			if (data.symbolicSampleSize == kSample32)
-				return processBypass<Sample32>(
+				return processAudioBuffer<Sample32>(
 					numChannels, numSamples,
 					(Sample32 **)buf_in, (Sample32 **)buf_out
 				);
 
 			if (data.symbolicSampleSize == kSample64)
-				return processBypass<Sample64>(
+				return processAudioBuffer<Sample64>(
 					numChannels, numSamples,
 					(Sample64 **)buf_in, (Sample64 **)buf_out
 				);

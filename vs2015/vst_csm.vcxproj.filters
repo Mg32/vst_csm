@@ -30,13 +30,7 @@
     <ClInclude Include="..\include\csm_analyzer.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\csm_frame_analyzer.hpp">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\csm_frame_data.hpp">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\csm_frame_synthesizer.hpp">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\hankel_equation.hpp">
@@ -58,6 +52,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\vst_tags.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\csm_sample_handler.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\csm_synthesizer.hpp">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
