@@ -26,8 +26,8 @@ public:
 	CsmSampleHandler(int order, double fs, double interval)
 		: m_order(order)
 		, m_fs(fs)
-		, m_buffer_size((unsigned)(fs * interval))
-		, m_r_size((unsigned)(2 * order + 2))
+		, m_buffer_size(static_cast<unsigned>(fs * interval))
+		, m_r_size(static_cast<unsigned>(2 * order + 2))
 		, m_offset(0)
 		, m_csm_analyzer(new CsmAnalyzer(order))
 		, m_csm_synth(new CsmSynthesizer(fs, interval))
@@ -36,7 +36,16 @@ public:
 		m_buffer_o = new double[m_buffer_size];
 		m_r = new double[m_r_size];
 
-		memset(m_buffer_o, 0, m_buffer_size);
+		for (size_t i = 0; i < m_buffer_size; i++)
+		{
+			m_buffer_i[i] = 0.0;
+			m_buffer_o[i] = 0.0;
+		}
+		for (size_t i = 0; i < m_r_size; i++)
+		{
+			m_r[i] = 0.0;
+		}
+		m_r[0] = 1.0;
 	}
 
 	~CsmSampleHandler()

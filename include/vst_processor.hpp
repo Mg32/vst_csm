@@ -6,6 +6,7 @@
 #include "csm_sample_handler.hpp"
 
 #include <public.sdk/source/vst/vstaudioeffect.h>
+#include <pluginterfaces/base/ibstream.h>
 
 namespace Steinberg {
 	namespace Vst {
@@ -28,6 +29,9 @@ namespace Steinberg {
 				SpeakerArrangement * outputs, int32 numOuts);
 
 			tresult PLUGIN_API canProcessSampleSize(int32 symbolicSampleSize);
+
+			tresult PLUGIN_API setState(IBStream * state);
+			tresult PLUGIN_API getState(IBStream * state);
 			
 			tresult PLUGIN_API process(ProcessData & data);
 			

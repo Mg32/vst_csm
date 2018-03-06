@@ -4,6 +4,7 @@
 #include "vst_tags.hpp"
 
 #include <public.sdk/source/vst/vsteditcontroller.h>
+#include <pluginterfaces/base/ibstream.h>
 
 namespace Steinberg {
 	namespace Vst {
@@ -17,6 +18,8 @@ namespace Steinberg {
 			}
 
 			tresult PLUGIN_API initialize(FUnknown * context);
+
+			tresult PLUGIN_API setComponentState(IBStream * state);
 
 			static FUnknown * createInstance(void *)
 			{

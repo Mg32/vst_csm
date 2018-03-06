@@ -38,10 +38,35 @@ namespace Steinberg {
 			if (symbolicSampleSize == kSample32)
 				return kResultTrue;
 		
-			if (symbolicSampleSize == kSample64)
+			else if (symbolicSampleSize == kSample64)
 				return kResultTrue;
 		
 			return kResultFalse;
+		}
+
+		tresult PLUGIN_API VstProcessor::setState(IBStream * state)
+		{
+			tresult result;
+
+			int32 stateBypass = 0;
+			result = state->read(&stateBypass, sizeof(stateBypass));
+			if (result != kResultOk)
+				return kResultFalse;
+
+#if BYTEORDER == kBigEndian
+			SWAP_32(stateBypass);
+#endif
+			m_bypass = (stateBypass > 0);
+
+			return kResultOk;
+		}
+
+		tresult PLUGIN_API VstProcessor::getState(IBStream * state)
+		{
+			int32 stateBypass = m_bypass ? 1 : 0;
+			state->write(&stateBypass, sizeof(stateBypass));
+
+			return kResultOk;
 		}
 
 
@@ -69,7 +94,7 @@ namespace Steinberg {
 					switch (tag)
 					{
 					case TAG_PARAM_BYPASS:
-						m_bypass = ((double)value > 0.5);
+						m_bypass = (value > 0.5);
 						break;
 
 					default:
@@ -92,6 +117,8 @@ namespace Steinberg {
 			void ** buf_in = getChannelBuffersPointer(this->processSetup, input);
 			void ** buf_out = getChannelBuffersPointer(this->processSetup, output);
 
+			if (!buf_in || !buf_out) return kResultTrue;
+
 			// bypass
 			if (m_bypass)
 			{
@@ -101,7 +128,7 @@ namespace Steinberg {
 						(Sample32 **)buf_in, (Sample32 **)buf_out
 					);
 
-				if (data.symbolicSampleSize == kSample64)
+				else if (data.symbolicSampleSize == kSample64)
 					return processBypass<Sample64>(
 						numChannels, numSamples,
 						(Sample64 **)buf_in, (Sample64 **)buf_out
@@ -117,7 +144,7 @@ namespace Steinberg {
 					(Sample32 **)buf_in, (Sample32 **)buf_out
 				);
 
-			if (data.symbolicSampleSize == kSample64)
+			else if (data.symbolicSampleSize == kSample64)
 				return processAudioBuffer<Sample64>(
 					numChannels, numSamples,
 					(Sample64 **)buf_in, (Sample64 **)buf_out
