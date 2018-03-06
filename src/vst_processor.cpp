@@ -93,7 +93,7 @@ namespace Steinberg {
 					int32 tag = queue->getParameterId();
 					switch (tag)
 					{
-					case TAG_PARAM_BYPASS:
+					case kParamBypass:
 						m_bypass = (value > 0.5);
 						break;
 

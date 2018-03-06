@@ -12,8 +12,8 @@ namespace Steinberg {
 				parameters.addParameter(
 					STR16("Bypass"), 0,
 					1, 0,
-					ParameterInfo::kIsBypass,
-					TAG_PARAM_BYPASS
+					ParameterInfo::kCanAutomate | ParameterInfo::kIsBypass,
+					kParamBypass
 				);
 			}
 
@@ -22,6 +22,8 @@ namespace Steinberg {
 
 		tresult PLUGIN_API VstController::setComponentState(IBStream * state)
 		{
+			if (!state) return kResultOk;
+
 			tresult result;
 
 			int32 stateBypass;
@@ -29,7 +31,7 @@ namespace Steinberg {
 			if (result != kResultOk)
 				return kResultFalse;
 
-			setParamNormalized(TAG_PARAM_BYPASS, (stateBypass > 0) ? 1 : 0);
+			setParamNormalized(kParamBypass, (stateBypass > 0) ? 1 : 0);
 
 			return kResultOk;
 		}
