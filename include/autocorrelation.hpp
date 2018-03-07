@@ -1,21 +1,27 @@
 
 #pragma once
 
-#include <iostream>
+#include <cstddef>
 
 class Autocorrelation {
 public:
-    void operator()(const double * x, const std::size_t length_x, double * r, const std::size_t length_r)
+    // calculates autocorrelation coefficients r (of length_r) from signal x (of length_x).
+    // returns false if the parameters are invalid.
+    bool operator()(const double * x, const std::size_t length_x, double * r, const std::size_t length_r)
     {
-        for (int lag = 0; lag < length_r; lag++)
+        if (!x || !r || length_x < length_r)
+            return false;
+
+        for (std::size_t lag = 0; lag < length_r; lag++)
         {
             r[lag] = 0;
-            for (int n = 0; n < length_x - lag; n++)
+            for (std::size_t n = 0; n < length_x - lag; n++)
             {
                 r[lag] += x[n] * x[n + lag];
             }
-            r[lag] /= (double)length_x;
+            r[lag] /= static_cast<double>(length_x);
         }
-        return;
+
+        return true;
     }
 };

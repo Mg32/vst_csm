@@ -9,7 +9,7 @@ CXXFLAGS = -g -MMD -MP -Wall -Wextra -Wunused-function -I../include \
 		    -pthread
 LDFLAGS = -lgtest.dll -lgtest_main.dll
 
-SRCS =
+SRCS = autocorrelation.cpp
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)
 
