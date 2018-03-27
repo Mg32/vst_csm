@@ -13,6 +13,7 @@ namespace {
         Autocorrelation ac;
     };
 
+    // cppcheck-suppress syntaxError
     TEST_F(TestAutocorr, Parameters)
     {
         const size_t max_length = 4;
@@ -34,7 +35,7 @@ namespace {
         ASSERT_TRUE(ac(x, max_length, r, max_length));
     }
 
-    TEST_F(TestAutocorr, Result)
+    TEST_F(TestAutocorr, CompareResult)
     {
         const size_t x_length = 10, r_length = 5;
         const double x[x_length] = { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
