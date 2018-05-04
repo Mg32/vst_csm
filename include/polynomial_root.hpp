@@ -18,8 +18,10 @@ public:
         m_companion.block(1, 0, order-1, order-1).setIdentity();
     }
 
-    void operator()(double * p, double * x)
+    bool operator()(double * p, double * x)
     {
+        if (m_order <= 2 || !p || !x) { return false; }
+
         // set polynomial coefficients to our companion matrix
         m_companion.col(m_order-1) = -Eigen::Map<Eigen::VectorXd>(p, m_order-1);
 
@@ -27,6 +29,8 @@ public:
         e_solver.compute(m_companion, false);
 
         Eigen::Map<Eigen::VectorXd>(x, m_order) = e_solver.eigenvalues().real();
+
+        return true;
     }
 
 private:
