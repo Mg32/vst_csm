@@ -39,12 +39,11 @@ namespace {
         double u_desired[6] = { 1, 2, 2, 2.5, 2.5, 2.875 };
         double u[6];
 
+        // calculate
         ChebyshevExpansion ce(2);
         ce(r, u);
 
         // check all the elements
-        for (int i = 0; i < 6; i++) {
-            ASSERT_DOUBLE_EQ(u[i], u_desired[i]);
-        }
+        ASSERT_TRUE(isapprox(u, u_desired, 6));
     }
 }
