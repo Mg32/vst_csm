@@ -10,13 +10,19 @@ public:
     {
     }
 
-    ChebyshevExpansion(const int n)
+    explicit ChebyshevExpansion(const int n)
     {
-        create_table(n);
+        createTable(n);
     }
 
-    void create_table(const int n)
+    void createTable(const int n)
     {
+        if (n <= 0)
+        {
+            m_size = 0;
+            return;
+        }
+
         m_size = 2 * n + 2;
         m_table = Eigen::MatrixXd::Zero(m_size, m_size);
 
@@ -42,8 +48,11 @@ public:
         }
     }
 
-    void operator()(const double * r, double * u)
+    bool operator()(const double * r, double * u)
     {
+        if (m_size == 0 || !r || !u)
+            return false;
+
         for (int l = 0; l < m_size; l++)
         {
             u[l] = 0;
@@ -52,6 +61,8 @@ public:
                 u[l] += m_table(l, k) * r[abs(2 * k - l)];
             }
         }
+
+        return true;
     }
 
 private:
