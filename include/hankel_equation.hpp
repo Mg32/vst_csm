@@ -19,9 +19,9 @@ public:
     {
     }
 
-    void operator()(const double * u, double * p)
+    bool operator()(const double * u, double * p)
     {
-        if (m_order <= 0) { return; }
+        if (m_order <= 0 || !u || !p) { return false; }
 
         double q_sum = u[1] / u[0];
         double q = q_sum;
@@ -70,7 +70,7 @@ public:
             }
         }
 
-        return;
+        return true;
     }
 
 private:
